@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catch the Ball</title>
+<style>
+body {
+  text-align:center;
+  background:#15152f;
+  color:white;
+  font-family:Arial;
+}
+canvas {
+  background:#252550;
+  border:3px solid white;
+  border-radius:12px;
+  touch-action:none;
+}
+</style>
+</head>
+<body>
+<h2>🎮 Catch the Ball</h2>
+<h3>Score: <span id="score">0</span></h3>
+<canvas id="game" width="320" height="450"></canvas>
+<p>আঙুল দিয়ে নিচের প্ল্যাটফর্ম সরিয়ে বল ধরুন!</p>
+<script>
+const c=document.getElementById("game");
+const ctx=c.getContext("2d");
+let x=160,y=80,dx=3,dy=3;
+let pad=120,score=0;
+function draw(){
+ ctx.clearRect(0,0,320,450);
+ ctx.fillStyle="yellow";
+ ctx.beginPath();
+ ctx.arc(x,y,10,0,Math.PI*2);
+ ctx.fill();
+ ctx.fillStyle="lime";
+ ctx.fillRect(pad,425,80,12);
+ x+=dx;y+=dy;
+ if(x<10||x>310)dx=-dx;
+ if(y<10)dy=-dy;
+ if(y>415&&x>pad&&x<pad+80){
+ dy=-dy;score++;
+ document.getElementById("score").innerText=score;
+ }
+ if(y>450){alert("Game Over! Score: "+score);location.reload();}
+ requestAnimationFrame(draw);
+}
+c.addEventListener("touchmove",e=>{
+ pad=e.touches[0].clientX-c.getBoundingClientRect().left-40;
+ pad=Math.max(0,Math.min(240,pad));
+});
+c.addEventListener("mousemove",e=>{
+ if(e.buttons)pad=Math.max(0,Math.min(240,e.offsetX-40));
+});
+draw();
+</script>
+</body>
+</html>
